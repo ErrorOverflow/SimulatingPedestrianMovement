@@ -33,15 +33,19 @@ def gravity(loc):
     x_bias = 12.46 - loc[0];
     y_bias = (7.39 + 6.39) / 2 - loc[1];
     z_bias = np.sqrt(np.square(x_bias) + np.square(y_bias))
-    grav[0] = x_bias / z_bias
-    grav[1] = y_bias / z_bias
+    grav[0] = x_bias / z_bias * 0.1
+    grav[1] = y_bias / z_bias * 0.1
     return grav
 
 
 def illegal_judge(loc, force):
-    if (loc[0] >= 9.33 and loc[0] <= 9.91 and loc[1] >= 6.32 and loc[1] <= 7.50):
-        force[0] = 0
-        force[1] += 0.2 * force[0]
+    if (loc[0] >= (9.33 - 0.3) and loc[0] <= 9.91 and loc[1] >= (6.32 - 0.3) and loc[1] <= (7.50 + 0.3)):
+        if (loc[0] <= 9.33):
+            force[0] = 0
+            force[1] = (loc[1]-(6.32+7.50)/2)*random.random()*0.02
+        else:
+            force[1] = 0
+            force[0] += random.random()*0.02
         return force
     return force
 
@@ -51,6 +55,8 @@ def move(force, pre_v):
     now[0] = pre_v[0] + force[0]
     now[1] = pre_v[1] + force[1]
     force = illegal_judge(now, force)
+    if force[0] == 0 and force[1] <= 0.01:
+        force[1] = (pre_v[1]-(6.32+7.50)/2)*random.random() * 0.2
     now[0] = pre_v[0] + force[0]
     now[1] = pre_v[1] + force[1]
     return now
@@ -66,5 +72,4 @@ for round in range(2000):
         location[i] = move(force, location[i])
     ui.init(location)
     ui.barrier()
-    time.sleep(0.5)
-ui.run()
+    time.sleep(0.2)
