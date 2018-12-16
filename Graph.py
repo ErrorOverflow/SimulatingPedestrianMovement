@@ -12,12 +12,18 @@ class UI:
         self.top.resizable(width=False, height=False)
         self.C.pack()
         self.walker_num = num
+
+    def barrier(self):
         self.C.create_rectangle(3.41 * 50, (10.28 - 0.53) * 50, 12.46 * 50, 10.28 * 50, fill="gray")
         self.C.create_rectangle(9.33 * 50, 6.32 * 50, 9.91 * 50, 7.50 * 50, fill="gray")
         self.C.create_rectangle(3.41 * 50, 3.21 * 50, 3.94 * 50, 10.28 * 50, fill="gray")
         self.C.create_rectangle(3.41 * 50, 3.21 * 50, 12.46 * 50, 3.74 * 50, fill="gray")
         self.C.create_rectangle((12.46 - (3.94 - 3.41)) * 50, 7.39 * 50, 12.46 * 50, 10.28 * 50, fill="gray")
         self.C.create_rectangle((12.46 - (3.94 - 3.41)) * 50, 3.21 * 50, 12.46 * 50, 6.39 * 50, fill="gray")
+        self.C.update()
+
+    def delete(self):
+        self.C.delete("all")
 
     def init(self, info):
         for index in info:
