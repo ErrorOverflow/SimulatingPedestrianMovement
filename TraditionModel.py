@@ -7,7 +7,6 @@ import time
 
 def init():
     walkers = [[0.00 for num in range(2)] for loc in range(24)]
-    # 5-8 5-8
     i = 0
     isFill = 0
     while i < 24:
@@ -59,11 +58,12 @@ def avoid_hit(force, pre_v, num):
         next[0] = pre_v[0] + force[0]
         next[1] = pre_v[1] + force[1]
         if i == num:
+            i += 1
             continue
-        while lib.distance(next, location[i]) <= 0.4:
+        while lib.distance(next, location[i]) <= 0.4 and pow(force[0], 2) + pow(force[1], 2) != 0:
             print(lib.distance(next, location[i]))
-            force[0] = force[0] * 0.8
-            force[1] = force[1] * 0.8
+            force[0] = force[0] * 0.5
+            force[1] = force[1] * 0.5
             next[0] = pre_v[0] + force[0]
             next[1] = pre_v[1] + force[1]
         i += 1
@@ -78,7 +78,7 @@ def move(force, pre_v, num):
     force = illegal_judge(now, force)
     if force[0] == 0 and force[1] <= 0.01:
         force[1] = (pre_v[1] - (6.32 + 7.50) / 2) * random.random() * 0.2
-    #force = avoid_hit(force, pre_v, num)
+    force = avoid_hit(force, pre_v, num)
     now[0] = pre_v[0] + force[0]
     now[1] = pre_v[1] + force[1]
     return now
@@ -93,4 +93,4 @@ for round in range(2000):
         location[i] = move(force, location[i], i)
     ui.init(location)
     ui.barrier()
-    time.sleep(0.02)
+    time.sleep(0.2)
