@@ -40,8 +40,8 @@ def gravity(loc):
 
 
 def illegal_judge(loc, force):
-    if (loc[0] >= (9.33 - 0.3) and loc[0] <= 9.91 and loc[1] >= (6.32 - 0.3) and loc[1] <= (7.50 + 0.3)):
-        if (loc[0] <= 9.33):
+    if (9.33 - 0.3) <= loc[0] <= 9.91 and (6.32 - 0.3) <= loc[1] <= (7.50 + 0.3):
+        if loc[0] <= 9.33:
             force[0] = 0
             force[1] = (loc[1] - (6.32 + 7.50) / 2) * random.random() * 0.02
         else:
