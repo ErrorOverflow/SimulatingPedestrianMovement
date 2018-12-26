@@ -58,7 +58,7 @@ def gravity(loc):  # 驱动力
 
 
 def illegal_judge(loc, force):  # 墙排斥
-    if (9.33 - 0.3) <= loc[0] <= 9.91 and (6.32 - 0.3) <= loc[1] <= (7.50 + 0.3):
+    if (9.33 - 0.2) <= loc[0] <= 9.91 and (6.32 - 0.2) <= loc[1] <= (7.50 + 0.2):
         if loc[0] <= 9.33:
             force[0] = 0
             force[1] = (loc[1] - (6.32 + 7.50) / 2) * random.random() * 0.05
@@ -69,23 +69,24 @@ def illegal_judge(loc, force):  # 墙排斥
     return force
 
 
-def avoid_hit(force, pre_v, num):  # 失败的行人碰撞
+def avoid_hit(force, pre_v, num):  # 行人碰撞
+    near = [0.00 for i in range(2)]
     i = 0
-    next = [0.00 for j in range(2)]
     while i < 24:
-        next[0] = pre_v[0] + force[0]
-        next[1] = pre_v[1] + force[1]
         if i == num:
             i += 1
             continue
-        while lib.distance(next, location[i]) <= 0.4 and pow(force[0], 2) + pow(force[1], 2) != 0:
-            print(lib.distance(next, location[i]))
-            force[0] = force[0] * 0.5
-            force[1] = force[1] * 0.5
-            next[0] = pre_v[0] + force[0]
-            next[1] = pre_v[1] + force[1]
+        if lib.distance(pre_v, location[i]) <= 0.4:
+            near[0] += (location[i][0] - pre_v[0])
+            near[1] += (location[i][1] - pre_v[1])
         i += 1
-
+    near[0] *= -1
+    near[1] *= -1
+    z_bias = np.sqrt(np.square(near[0]) + np.square(near[1]))
+    if z_bias == 0:
+        return force
+    force[0] = (force[0] / 0.1 + near[0] / z_bias) * 0.05
+    force[1] = (force[1] / 0.1 + near[1] / z_bias) * 0.05
     return force
 
 
